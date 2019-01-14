@@ -1,0 +1,34 @@
+version: '3.5'
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto
+    hostname: mosquitto
+    container_name: mosquitto
+    networks:
+      - default
+    restart: always
+    expose:
+      - "1883"
+      - "9001"
+    ports:
+      - 0.0.0.0:1883:1883
+      - "9001:9001"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  adaptor:
+    build: .
+    depends_on:
+      - mosquitto
+    networks:
+      - default
+    restart: always
+    environment:
+      - "INTERNAL_DEBUG_DATA_FLOW = ${DEBUG_DATA_FLOW}"
+
+  tester:
+    image: alpine
+    networks:
+      - default
+    restart: always
