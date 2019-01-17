@@ -8,18 +8,13 @@ services:
     hostname: mosquitto
     networks:
       - data_get
-    restart: always
-    expose:
-      - "1883"
-      - "9001"
     ports:
       - 0.0.0.0:1883:1883
-      - "9001:9001"
     volumes:
       - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
 
   adaptor:
-    build: ./adaptor
+    image: dorogans/iot-hub
     hostname: adaptor
     depends_on:
       - mosquitto
@@ -27,7 +22,6 @@ services:
     networks:
       - data_get
       - data_save
-    restart: always
     environment:
       - DEBUG_DATA_FLOW=${DEBUG_DATA_FLOW:-false}
     volumes:
@@ -39,7 +33,6 @@ services:
     networks:
       - data_save
       - data_show
-    restart: always
     volumes:
       - influxdb_vol:/var/lib/influxdb
 
@@ -50,9 +43,6 @@ services:
       - influxdb
     networks:
       - data_show
-    restart: always
-    expose:
-      - 3000
     ports:
       - 0.0.0.0:80:3000
     volumes:
@@ -62,8 +52,6 @@ services:
 
 volumes:
   influxdb_vol:
-  grafana_storage:
-
 
 networks:
   data_get:

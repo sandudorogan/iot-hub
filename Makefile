@@ -2,45 +2,38 @@ LOG_VAR=DEBUG_DATA_FLOW
 
 DB_NAME=iot
 
+PRJ_NAME=sprc3
+YML_NAME=stack.yml
+
 #############################################
 
-config: up
-	# docker exec influxdb influx -execute "create database ${DB_NAME} with duration inf"
-	docker exec influxdb influx -execute "use ${DB_NAME}"
+config: init deploy
+	docker exec influxdb influx -execute "create database ${DB_NAME} with duration inf"
+init: 
+	docker swarm $@
 
-up: docker-compose.yml ./adaptor/adaptor.py
-	docker-compose up -d
-
-
-build:
-	docker-compose build
-
+deploy: ${YML_NAME} ./adaptor/adaptor.py
+	docker stack $@ -c ${YML_NAME} ${PRJ_NAME}
 ps:
-	docker-compose ps
-
-images:
-	docker-compose images
-
-logs:
-	docker-compose logs
-
-down:
-	docker-compose down
-
+	docker stack $@ ${PRJ_NAME}
+ls:
+	docker stack $@
+services:
+	docker stack $@ ${PRJ_NAME}
+rm:
+	docker stack $@ ${PRJ_NAME}
 
 logs-up:
 	export ${LOG_VAR}="true"
-
 logs-down:
 	export ${LOG_VAR}="false"
 
 
 test:
 	mosquitto_pub -t "/acasa/el" -f ./tests/test_message
-
 peek:
-	docker exec influxdb influx -execute "select * from ${DB_NAME}"
+	docker exec $(shell docker ps -q -f name=influxdb) influx -execute "select * from ${DB_NAME}"
 	# docker exec -d influxdb influx -execute "use ${DB_NAME}"
 
 into:
-	docker exec -it influxdb influx -precision rfc3339
+	docker exec -it $(shell docker ps -q -f name=influxdb) influx -precision rfc3339
