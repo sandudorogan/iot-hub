@@ -6,18 +6,21 @@ It uses a Mosquitto broker for recieving the messages, InfluxDB for storage and 
 All of them are complicent to the SPRC 3rd homework assignment.
 
 ## Run
-The first run uses
+The first run should use:
 ```bash
 make
 ```
-or
+or:
 ```bash
 ./run.sh
 ```
-.
 
-Otherwise, use 
+For subsequent runs, use: 
 ```bash
 make deploy
 ```
-.
+
+To stop the swarm, use:
+```bash
+make rm
+```
