@@ -1,12 +1,13 @@
-version: '3.5'
+version: '3.7'
+
 
 services:
+
   mosquitto:
     image: eclipse-mosquitto
     hostname: mosquitto
-    container_name: mosquitto
     networks:
-      - default
+      - data_get
     restart: always
     expose:
       - "1883"
@@ -15,20 +16,56 @@ services:
       - 0.0.0.0:1883:1883
       - "9001:9001"
     volumes:
-      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
 
   adaptor:
-    build: .
+    build: ./adaptor
+    hostname: adaptor
     depends_on:
       - mosquitto
+      - influxdb
     networks:
-      - default
+      - data_get
+      - data_save
     restart: always
     environment:
-      - "INTERNAL_DEBUG_DATA_FLOW = ${DEBUG_DATA_FLOW}"
+      - DEBUG_DATA_FLOW=${DEBUG_DATA_FLOW:-false}
+    volumes:
+      - ./adaptor/adaptor.py:/app/adaptor.py
 
-  tester:
-    image: alpine
+  influxdb:
+    image: influxdb
+    hostname: influxdb
     networks:
-      - default
+      - data_save
+      - data_show
     restart: always
+    volumes:
+      - influxdb_vol:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana
+    hostname: grafana
+    depends_on:
+      - influxdb
+    networks:
+      - data_show
+    restart: always
+    expose:
+      - 3000
+    ports:
+      - 0.0.0.0:80:3000
+    volumes:
+      - ./grafana/custom.ini:/etc/grafana/grafana.ini
+      - ./grafana/storage/grafana:/var/lib/grafana:rw
+
+
+volumes:
+  influxdb_vol:
+  grafana_storage:
+
+
+networks:
+  data_get:
+  data_save:
+  data_show:
