@@ -27,7 +27,7 @@ make rm
 
 ## Implementation
 * The MQTT broker uses the official Eclipse image. It exposes the default port to all IPs.
-* The adaptor/MQTT subscriber is written in Python, and listens at all the topics (#).
+* The adaptor/MQTT subscriber is written in Python, and listens at all the topics (#). The image was uploaded to DockerHub, for ```docker docker stach deploy``` command.
 * The InfluxDB is just that, the default database. Though at the initial setup, a default database (iot) is created.
 * For visualization, Grafana is used. All the neccessarry configurations have been made. 
 
