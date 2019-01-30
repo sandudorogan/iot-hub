@@ -3,7 +3,7 @@
 A docker swarm-ed Hub for recieving, storing and showing IoT data.
 It relies on a Mosquitto broker for recieving the messages, InfluxDB for storage and Grafana for showing it. 
 
-## Sistem requirements
+## System requirements
 The swarm has been tested on ```Linux``` version of ```Docker 18.01```.
 
 ## Run
