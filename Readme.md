@@ -7,7 +7,7 @@ It relies on a Mosquitto broker for recieving the messages, InfluxDB for storage
 The swarm has been tested on ```Linux``` version of ```Docker 18.01```.
 
 ## Run
-On a bash, the first run should use:
+In a bash, a first run should use:
 ```bash
 make
 ```
@@ -15,7 +15,7 @@ or:
 ```bash
 ./run.sh
 ```
-It'll initiate all of the assets.
+It'll initiate all of the internal assets.
 
 For subsequent runs, use: 
 ```bash
@@ -32,7 +32,7 @@ make rm
 * The adaptor/MQTT subscriber is written in Python. It does the subscription and listens to all the topics (#). It is log enabled through an environment variable.
 The image was uploaded to DockerHub, for ```docker stach deploy``` command.
 * The official InfluxDB docker image is used for data storage. At the initial setup, a default database (called "iot") is created.
-* For visual feedback, Grafana is used. All the neccessary configurations have been made and saved in grafana subfolder. It acceses them through a bind mount. Though in future versions the config should be stored in a JSON format. 
+* For visual feedback, Grafana is used. All the neccessary configurations have been made and saved in grafana subfolder. It acceses them through a bind mount. Though in future versions the config should be stored as JSON format. 
 
 ## Author
 * Sandu Dorogan
