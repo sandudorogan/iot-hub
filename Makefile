@@ -33,7 +33,5 @@ test:
 	mosquitto_pub -t "/acasa/el" -f ./tests/test_message
 peek:
 	docker exec $(shell docker ps -q -f name=influxdb) influx -execute "select * from ${DB_NAME}"
-	# docker exec -d influxdb influx -execute "use ${DB_NAME}"
-
 into:
 	docker exec -it $(shell docker ps -q -f name=influxdb) influx -precision rfc3339
