@@ -23,6 +23,7 @@ make deploy
 ```
 
 To stop the swarm, use:
+rand
 ```bash
 make rm
 ```
